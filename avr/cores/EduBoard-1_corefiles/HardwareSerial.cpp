@@ -100,15 +100,15 @@ void HardwareSerial::_tx_udr_empty_irq(void)
   // actually got written. Other r/w bits are preserved, and zeroes
   // written to the rest.
 
-  #ifdef MPCM0
-    *_ucsra = ((*_ucsra) & ((1 << U2X0) | (1 << MPCM0))) | (1 << TXC0);
-  #else
-    *_ucsra = ((*_ucsra) & ((1 << U2X0) | (1 << TXC0)));
-  #endif
+#ifdef MPCM0
+  *_ucsra = ((*_ucsra) & ((1 << U2X0) | (1 << MPCM0))) | (1 << TXC0);
+#else
+  *_ucsra = ((*_ucsra) & ((1 << U2X0) | (1 << TXC0)));
+#endif
 
   if (_tx_buffer_head == _tx_buffer_tail) {
     // Buffer empty, so disable interrupts
-    *_ucsrb &= ~_BV(UDRIE0);
+    cbi(*_ucsrb, UDRIE0);
   }
 }
 
@@ -145,8 +145,10 @@ void HardwareSerial::begin(unsigned long baud, byte config)
 #endif
   *_ucsrc = config;
   
-  *_ucsrb |= _BV(RXEN0) | _BV(TXEN0) | _BV(RXCIE0);
-  *_ucsrb &= ~_BV(UDRIE0);
+  sbi(*_ucsrb, RXEN0);
+  sbi(*_ucsrb, TXEN0);
+  sbi(*_ucsrb, RXCIE0);
+  cbi(*_ucsrb, UDRIE0);
 }
 
 void HardwareSerial::end()
@@ -154,7 +156,10 @@ void HardwareSerial::end()
   // wait for transmission of outgoing data
   flush();
 
-  *_ucsrb &= ~_BV(RXEN0) & ~_BV(TXEN0) & ~_BV(RXCIE0) & ~_BV(UDRIE0);
+  cbi(*_ucsrb, RXEN0);
+  cbi(*_ucsrb, TXEN0);
+  cbi(*_ucsrb, RXCIE0);
+  cbi(*_ucsrb, UDRIE0);
   
   // clear any received data
   _rx_buffer_head = _rx_buffer_tail;
@@ -209,14 +214,14 @@ void HardwareSerial::flush()
 
   while (bit_is_set(*_ucsrb, UDRIE0) || bit_is_clear(*_ucsra, TXC0)) {
     if (bit_is_clear(SREG, SREG_I) && bit_is_set(*_ucsrb, UDRIE0))
-      // Interrupts are globally disabled, but the DR empty
-      // interrupt should be enabled, so poll the DR empty flag to
-      // prevent deadlock
-      if (bit_is_set(*_ucsra, UDRE0))
-        _tx_udr_empty_irq();
+	// Interrupts are globally disabled, but the DR empty
+	// interrupt should be enabled, so poll the DR empty flag to
+	// prevent deadlock
+	if (bit_is_set(*_ucsra, UDRE0))
+	  _tx_udr_empty_irq();
   }
   // If we get here, nothing is queued anymore (DRIE is disabled) and
-  // the hardware finished tranmission (TXC is set).
+  // the hardware finished transmission (TXC is set).
 }
 
 size_t HardwareSerial::write(uint8_t c)
@@ -237,16 +242,16 @@ size_t HardwareSerial::write(uint8_t c)
     // be cleared when no bytes are left, causing flush() to hang
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
       *_udr = c;
-      #ifdef MPCM0
-        *_ucsra = ((*_ucsra) & ((1 << U2X0) | (1 << MPCM0))) | (1 << TXC0);
-      #else
-        *_ucsra = ((*_ucsra) & ((1 << U2X0) | (1 << TXC0)));
-      #endif
+#ifdef MPCM0
+      *_ucsra = ((*_ucsra) & ((1 << U2X0) | (1 << MPCM0))) | (1 << TXC0);
+#else
+      *_ucsra = ((*_ucsra) & ((1 << U2X0) | (1 << TXC0)));
+#endif
     }
     return 1;
   }
   tx_buffer_index_t i = (_tx_buffer_head + 1) % SERIAL_TX_BUFFER_SIZE;
-
+	
   // If the output buffer is full, there's nothing for it other than to 
   // wait for the interrupt handler to empty it a bit
   while (i == _tx_buffer_tail) {
@@ -256,19 +261,20 @@ size_t HardwareSerial::write(uint8_t c)
       // interrupt has happened and call the handler to free up
       // space for us.
       if(bit_is_set(*_ucsra, UDRE0))
-        _tx_udr_empty_irq();
+	_tx_udr_empty_irq();
     } else {
       // nop, the interrupt handler will free up space for us
     }
   }
 
   _tx_buffer[_tx_buffer_head] = c;
+
   // make atomic to prevent execution of ISR between setting the
   // head pointer and setting the interrupt flag resulting in buffer
   // retransmission
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
     _tx_buffer_head = i;
-    *_ucsrb |= _BV(UDRIE0);
+    sbi(*_ucsrb, UDRIE0);
   }
   
   return 1;

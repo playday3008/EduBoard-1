@@ -67,7 +67,7 @@ void pinMode(uint8_t pin, uint8_t mode)
 //
 // Mark Sproul:
 // - Removed inline. Save 170 bytes on atmega1280
-// - changed to a switch statment; added 32 bytes but much easier to read and maintain.
+// - changed to a switch statement; added 32 bytes but much easier to read and maintain.
 // - Added more #ifdefs, now compiles for atmega645
 //
 //static inline void turnOffPWM(uint8_t timer) __attribute__ ((always_inline));
@@ -76,109 +76,109 @@ static void turnOffPWM(uint8_t timer)
 {
   switch (timer)
   {
+    // Timer0
+    #if defined(TCCR0) && defined(COM01)
+      case TIMER0:
+        cbi(TCCR0, COM01);
+        break;
+      case TIMER0A:
+        cbi(TCCR0, COM01);
+        break;
+    #endif
+    #if defined(TCCR0A) && defined(COM0A1)
+      case TIMER0A:
+        cbi(TCCR0A, COM0A1);
+        break;
+    #endif
+    #if defined(TCCR0A) && defined(COM0B1)
+      case TIMER0B:
+        cbi(TCCR0A, COM0B1);
+        break;
+    #endif
+    
     // Timer1
     #if defined(TCCR1A) && defined(COM1A1)
       case TIMER1A:
-        TCCR1A &= ~_BV(COM1A1);
+        cbi(TCCR1A, COM1A1);
         break;
     #endif
     #if defined(TCCR1A) && defined(COM1B1)
       case TIMER1B:
-        TCCR1A &= ~_BV(COM1B1);
+        cbi(TCCR1A, COM1B1);
         break;
     #endif
     #if defined(TCCR1A) && defined(COM1C1)
       case TIMER1C:
-        TCCR1A &= ~_BV(COM1C1);
+        cbi(TCCR1A, COM1C1);
         break;
     #endif
     
     // Timer2
     #if defined(TCCR2) && defined(COM21)
       case TIMER2:
-        TCCR2 &= ~_BV(COM21);
+        cbi(TCCR2, COM21);
         break;
     #endif
     #if defined(TCCR2A) && defined(COM2A1)
       case TIMER2A:
-        TCCR2A &= ~_BV(COM2A1);
+        cbi(TCCR2A, COM2A1);
         break;
     #endif
     #if defined(TCCR2A) && defined(COM2B1)
       case TIMER2B:
-        TCCR2A &= ~_BV(COM2B1);
+        cbi(TCCR2A, COM2B1);
         break;
     #endif
 
     // Timer3
     #if defined(TCCR3A) && defined(COM3A1)
       case TIMER3A:
-        TCCR3A &= ~_BV(COM3A1);
+        cbi(TCCR3A, COM3A1);
         break;
     #endif
     #if defined(TCCR3A) && defined(COM3B1)
       case TIMER3B:
-        TCCR3A &= ~_BV(COM3B1);
+        cbi(TCCR3A, COM3B1);
         break;
     #endif
     #if defined(TCCR3A) && defined(COM3C1)
       case TIMER3C:
-        TCCR3A &= ~_BV(COM3C1);
+        cbi(TCCR3A, COM3C1);
         break;
     #endif
 
     // Timer4
     #if defined(TCCR4A) && defined(COM4A1)
       case TIMER4A:
-        TCCR4A &= ~_BV(COM4A1);
+        cbi(TCCR4A, COM4A1);
         break;
     #endif
     #if defined(TCCR4A) && defined(COM4B1)
       case  TIMER4B:
-        TCCR4A &= ~_BV(COM4B1);
+        cbi(TCCR4A, COM4B1);
         break;
     #endif
     #if defined(TCCR4A) && defined(COM4C1)
       case TIMER4C:
-        TCCR4A &= ~_BV(COM4C1);
+        cbi(TCCR4A, COM4C1);
         break;
     #endif
     #if defined(TCCR4C) && defined(COM4D1)
       case TIMER4D:
-        TCCR4C &= ~_BV(COM4D1);
+        cbi(TCCR4C, COM4D1);
         break;
     #endif
 
     // Timer5
     #if defined(TCCR5A)
       case TIMER5A:
-        TCCR5A &= ~_BV(COM5A1);
+        cbi(TCCR5A, COM5A1);
         break;
       case TIMER5B:
-        TCCR5A &= ~_BV(COM5B1);
+        cbi(TCCR5A, COM5B1);
         break;
       case TIMER5C:
-        TCCR5A &= ~_BV(COM5C1);
-        break;
-    #endif
-
-    // Timer0
-    #if defined(TCCR0) && defined(COM01)
-      case TIMER0:
-        TCCR0 &= ~_BV(COM01);
-        break;
-      case TIMER0A:
-        TCCR0 &= ~_BV(COM01);
-        break;
-    #endif
-    #if defined(TCCR0A) && defined(COM0A1)
-      case TIMER0A:
-        TCCR0A &= ~_BV(COM0A1);
-        break;
-    #endif
-    #if defined(TCCR0A) && defined(COM0B1)
-      case TIMER0B:
-        TCCR0A &= ~_BV(COM0B1);
+        cbi(TCCR5A, COM5C1);
         break;
     #endif
   }
