@@ -70,7 +70,7 @@ int analogRead(uint8_t pin)
   sbi(ADCSRA, ADSC);
 
   // ADSC is cleared when the conversion finishes
-  while (bit_is_set(ADCSRA, ADSC));
+  while (bit_is_set(ADCSRA, ADSC)) {};
 
   // ADC macro takes care of reading ADC register.
  	// avr-gcc implements the proper reading order: ADCL is read first.
@@ -106,14 +106,6 @@ void analogWrite(uint8_t pin, int val)
   {
     switch(digitalPinToTimer(pin))
     {
-      #if defined(TCCR0) && defined(COM00)
-      case TIMER0A:
-        // connect pwm to pin on timer 0
-        sbi(TCCR0, COM00);
-        OCR0 = val; // set pwm duty
-        break;
-      #endif
-
       #if defined(TCCR0) && defined(COM01)
       case TIMER0:
         // connect pwm to pin on timer 0
