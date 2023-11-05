@@ -37,18 +37,6 @@
               "name": "avrdude",
               "version": "7.2-arduino.1"
             }
-          ],
-          "discoveryDependencies": [
-            {
-              "packager": "arduino",
-              "name": "serial-discovery"
-            }
-          ],
-          "monitorDependencies": [
-            {
-              "packager": "arduino",
-              "name": "serial-monitor"
-            }
           ]
         }
       ],
