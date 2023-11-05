@@ -1,5 +1,4 @@
 # Menu options
-menu.clock=Clock
 menu.BOD=BOD
 menu.eeprom=EEPROM
 menu.LTO=Compiler LTO
