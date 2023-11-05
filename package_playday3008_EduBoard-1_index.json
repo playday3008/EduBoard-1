@@ -14,10 +14,10 @@
           "architecture": "avr",
           "version": "1.0.0",
           "category": "Contributed",
-          "url": "https://github.com/playday3008/EduBoard-1/archive/refs/tags/v1.0.0.tar.gz",
-          "archiveFileName": "EduBoard-1-1.0.0.tar.gz",
-          "checksum": "SHA-256:17ebc45c3f97bff68faf927b947d7ccfa2783a748a0d18dc60b518b75ea0add5",
-          "size": "145724",
+          "url": "https://github.com/playday3008/EduBoard-1/archive/refs/tags/v1.0.0-rc1.tar.gz",
+          "archiveFileName": "EduBoard-1-1.0.0-rc1.tar.gz",
+          "checksum": "SHA-256:9854de0a28928d6cf86f116e5351c6e71c0e171891c4d4a30da8031e9639586b",
+          "size": "145858",
           "boards": [
             {
               "name": "ATmega32"
