@@ -43,7 +43,7 @@ static void * new_helper(std::size_t size) {
     size = 1;
   return malloc(size);
 }
-[[gnu::weak]] void * operator new(std::size_t size) {
+void * operator new(std::size_t size) {
   void *res = new_helper(size);
 #if defined(NEW_TERMINATES_ON_FAILURE)
   if (!res)
@@ -52,11 +52,11 @@ static void * new_helper(std::size_t size) {
   return res;
 }
 
-[[gnu::weak]] void * operator new[](std::size_t size) {
+void * operator new[](std::size_t size) {
   return operator new(size);
 }
 
-[[gnu::weak]] void * operator new(std::size_t size, [[gnu::unused]] const std::nothrow_t tag) noexcept {
+void * operator new(std::size_t size, [[gnu::unused]] const std::nothrow_t tag) noexcept {
 #if defined(NEW_TERMINATES_ON_FAILURE)
   // Cannot call throwing operator new as standard suggests, so call
   // new_helper directly then
@@ -65,7 +65,7 @@ static void * new_helper(std::size_t size) {
   return operator new(size);
 #endif
 }
-[[gnu::weak]] void * operator new[](std::size_t size, [[gnu::unused]] const std::nothrow_t& tag) noexcept {
+void * operator new[](std::size_t size, [[gnu::unused]] const std::nothrow_t& tag) noexcept {
 #if defined(NEW_TERMINATES_ON_FAILURE)
   // Cannot call throwing operator new[] as standard suggests, so call
   // malloc directly then
@@ -84,26 +84,26 @@ void * operator new[](std::size_t size, void *place) noexcept {
   return operator new(size, place);
 }
 
-[[gnu::weak]] void operator delete(void * ptr) noexcept {
+void operator delete(void * ptr) noexcept {
   free(ptr);
 }
-[[gnu::weak]] void operator delete[](void * ptr) noexcept {
+void operator delete[](void * ptr) noexcept {
   operator delete(ptr);
 }
 
 #if __cplusplus >= 201402L
-[[gnu::weak]] void operator delete(void* ptr, [[gnu::unused]] std::size_t size) noexcept {
+void operator delete(void* ptr, [[gnu::unused]] std::size_t size) noexcept {
   operator delete(ptr);
 }
-[[gnu::weak]] void operator delete[](void * ptr, [[gnu::unused]] std::size_t size) noexcept {
+void operator delete[](void * ptr, [[gnu::unused]] std::size_t size) noexcept {
   operator delete[](ptr);
 }
 #endif // __cplusplus >= 201402L
 
-[[gnu::weak]] void operator delete(void* ptr, [[gnu::unused]] const std::nothrow_t& tag) noexcept {
+void operator delete(void* ptr, [[gnu::unused]] const std::nothrow_t& tag) noexcept {
   operator delete(ptr);
 }
-[[gnu::weak]] void operator delete[](void* ptr, [[gnu::unused]] const std::nothrow_t& tag) noexcept {
+void operator delete[](void* ptr, [[gnu::unused]] const std::nothrow_t& tag) noexcept {
   operator delete[](ptr);
 }
 
