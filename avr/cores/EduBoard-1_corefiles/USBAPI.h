@@ -32,7 +32,7 @@ typedef unsigned long u32;
 
 #include "Arduino.h"
 
-// This definitions is usefull if you want to reduce the EP_SIZE to 16
+// This definitions is useful if you want to reduce the EP_SIZE to 16
 // at the moment only 64 and 16 as EP_SIZE for all EPs are supported except the control endpoint
 #ifndef USB_EP_SIZE
 #define USB_EP_SIZE 64
@@ -65,6 +65,8 @@ public:
   void detach();  // Serial port goes down too...
   void poll();
   bool wakeupHost(); // returns false, when wakeup cannot be processed
+
+  bool isSuspended();
 };
 extern USBDevice_ USBDevice;
 
