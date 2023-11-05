@@ -40,25 +40,25 @@
 // often work, but occasionally a race condition can occur that makes
 // Serial behave erratically. See https://github.com/arduino/Arduino/issues/2405
 #if !defined(SERIAL_TX_BUFFER_SIZE)
-#if ((RAMEND - RAMSTART) < 1023)
-#define SERIAL_TX_BUFFER_SIZE 16
-#else
-#define SERIAL_TX_BUFFER_SIZE 64
-#endif
+#    if ((RAMEND - RAMSTART) < 1023)
+#        define SERIAL_TX_BUFFER_SIZE 16
+#    else
+#        define SERIAL_TX_BUFFER_SIZE 64
+#    endif
 #endif
 #if !defined(SERIAL_RX_BUFFER_SIZE)
-#if ((RAMEND - RAMSTART) < 1023)
-#define SERIAL_RX_BUFFER_SIZE 16
-#else
-#define SERIAL_RX_BUFFER_SIZE 64
+#    if ((RAMEND - RAMSTART) < 1023)
+#        define SERIAL_RX_BUFFER_SIZE 16
+#    else
+#        define SERIAL_RX_BUFFER_SIZE 64
+#    endif
 #endif
-#endif
-#if (SERIAL_TX_BUFFER_SIZE>256)
+#if (SERIAL_TX_BUFFER_SIZE > 256)
 typedef uint16_t tx_buffer_index_t;
 #else
 typedef uint8_t tx_buffer_index_t;
 #endif
-#if  (SERIAL_RX_BUFFER_SIZE>256)
+#if (SERIAL_RX_BUFFER_SIZE > 256)
 typedef uint16_t rx_buffer_index_t;
 #else
 typedef uint8_t rx_buffer_index_t;
@@ -90,15 +90,14 @@ typedef uint8_t rx_buffer_index_t;
 #define SERIAL_7O2 0x3C
 #define SERIAL_8O2 0x3E
 
-class HardwareSerial : public Stream
-{
+class HardwareSerial : public Stream {
   protected:
-    volatile uint8_t * const _ubrrh;
-    volatile uint8_t * const _ubrrl;
-    volatile uint8_t * const _ucsra;
-    volatile uint8_t * const _ucsrb;
-    volatile uint8_t * const _ucsrc;
-    volatile uint8_t * const _udr;
+    volatile uint8_t *const _ubrrh;
+    volatile uint8_t *const _ubrrl;
+    volatile uint8_t *const _ucsra;
+    volatile uint8_t *const _ucsrb;
+    volatile uint8_t *const _ucsrc;
+    volatile uint8_t *const _udr;
     // Has any byte been written to the UART since begin()
     bool _written;
 
@@ -114,48 +113,50 @@ class HardwareSerial : public Stream
     unsigned char _tx_buffer[SERIAL_TX_BUFFER_SIZE];
 
   public:
-    inline HardwareSerial(
-      volatile uint8_t *ubrrh, volatile uint8_t *ubrrl,
-      volatile uint8_t *ucsra, volatile uint8_t *ucsrb,
-      volatile uint8_t *ucsrc, volatile uint8_t *udr);
-    void begin(unsigned long baud) { begin(baud, SERIAL_8N1); }
-    void begin(unsigned long, uint8_t);
-    void end();
-    virtual int available(void);
-    virtual int peek(void);
-    virtual int read(void);
-    virtual int availableForWrite(void);
-    virtual void flush(void);
+    inline HardwareSerial(volatile uint8_t *ubrrh,
+                          volatile uint8_t *ubrrl,
+                          volatile uint8_t *ucsra,
+                          volatile uint8_t *ucsrb,
+                          volatile uint8_t *ucsrc,
+                          volatile uint8_t *udr);
+    void           begin(unsigned long baud) { begin(baud, SERIAL_8N1); }
+    void           begin(unsigned long, uint8_t);
+    void           end();
+    virtual int    available(void);
+    virtual int    peek(void);
+    virtual int    read(void);
+    virtual int    availableForWrite(void);
+    virtual void   flush(void);
     virtual size_t write(uint8_t);
-    inline size_t write(unsigned long n) { return write((uint8_t)n); }
-    inline size_t write(long n) { return write((uint8_t)n); }
-    inline size_t write(unsigned int n) { return write((uint8_t)n); }
-    inline size_t write(int n) { return write((uint8_t)n); }
+    inline size_t  write(unsigned long n) { return write((uint8_t)n); }
+    inline size_t  write(long n) { return write((uint8_t)n); }
+    inline size_t  write(unsigned int n) { return write((uint8_t)n); }
+    inline size_t  write(int n) { return write((uint8_t)n); }
     using Print::write; // pull in write(str) and write(buf, size) from Print
     operator bool() { return true; }
 
     // Interrupt handlers - Not intended to be called externally
     inline void _rx_complete_irq(void);
-    void _tx_udr_empty_irq(void);
+    void        _tx_udr_empty_irq(void);
 };
 
 #if defined(UBRRH) || defined(UBRR0H)
-  extern HardwareSerial Serial;
-  #define HAVE_HWSERIAL0
+extern HardwareSerial Serial;
+#    define HAVE_HWSERIAL0
 #endif
 #if defined(UBRR1H)
-  extern HardwareSerial Serial1;
-  #define HAVE_HWSERIAL1
+extern HardwareSerial Serial1;
+#    define HAVE_HWSERIAL1
 #endif
 #if defined(UBRR2H)
-  extern HardwareSerial Serial2;
-  #define HAVE_HWSERIAL2
+extern HardwareSerial Serial2;
+#    define HAVE_HWSERIAL2
 #endif
 #if defined(UBRR3H)
-  extern HardwareSerial Serial3;
-  #define HAVE_HWSERIAL3
+extern HardwareSerial Serial3;
+#    define HAVE_HWSERIAL3
 #endif
 
 extern void serialEventRun(void) __attribute__((weak));
 
-#endif
+#endif // HardwareSerial_h

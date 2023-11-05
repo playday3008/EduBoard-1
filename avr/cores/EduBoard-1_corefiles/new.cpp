@@ -30,88 +30,94 @@
 // #define NEW_TERMINATES_ON_FAILURE
 
 namespace std {
-  // Defined in abi.cpp
-  void terminate();
+    // Defined in abi.cpp
+    void terminate();
 
-  const nothrow_t nothrow;
-}
+    const nothrow_t nothrow;
+} // namespace std
 
-static void * new_helper(std::size_t size) {
-  // Even zero-sized allocations should return a unique pointer, but
-  // malloc does not guarantee this
-  if (size == 0)
-    size = 1;
-  return malloc(size);
+static void *new_helper(std::size_t size) {
+    // Even zero-sized allocations should return a unique pointer, but
+    // malloc does not guarantee this
+    if (size == 0)
+        size = 1;
+    return malloc(size);
 }
-void * operator new(std::size_t size) {
-  void *res = new_helper(size);
+void *operator new(std::size_t size) {
+    void *res = new_helper(size);
 #if defined(NEW_TERMINATES_ON_FAILURE)
-  if (!res)
-    std::terminate();
+    if (!res)
+        std::terminate();
 #endif
-  return res;
+    return res;
 }
 
-void * operator new[](std::size_t size) {
-  return operator new(size);
+void *operator new[](std::size_t size) {
+    return operator new(size);
 }
 
-void * operator new(std::size_t size, [[gnu::unused]] const std::nothrow_t tag) noexcept {
+void *operator new(std::size_t                          size,
+                   [[gnu::unused]] const std::nothrow_t tag) noexcept {
 #if defined(NEW_TERMINATES_ON_FAILURE)
-  // Cannot call throwing operator new as standard suggests, so call
-  // new_helper directly then
-  return new_helper(size);
+    // Cannot call throwing operator new as standard suggests, so call
+    // new_helper directly then
+    return new_helper(size);
 #else
-  return operator new(size);
+    return operator new(size);
 #endif
 }
-void * operator new[](std::size_t size, [[gnu::unused]] const std::nothrow_t& tag) noexcept {
+void *operator new[](std::size_t                           size,
+                     [[gnu::unused]] const std::nothrow_t &tag) noexcept {
 #if defined(NEW_TERMINATES_ON_FAILURE)
-  // Cannot call throwing operator new[] as standard suggests, so call
-  // malloc directly then
-  return new_helper(size);
+    // Cannot call throwing operator new[] as standard suggests, so call
+    // malloc directly then
+    return new_helper(size);
 #else
-  return operator new[](size);
+    return operator new[](size);
 #endif
 }
 
-void * operator new(std::size_t size, void *place) noexcept {
-  // Nothing to do
-  (void)size; // unused
-  return place;
+void *operator new(std::size_t size, void *place) noexcept {
+    // Nothing to do
+    (void)size; // unused
+    return place;
 }
-void * operator new[](std::size_t size, void *place) noexcept {
-  return operator new(size, place);
+void *operator new[](std::size_t size, void *place) noexcept {
+    return operator new(size, place);
 }
 
-void operator delete(void * ptr) noexcept {
-  free(ptr);
+void operator delete(void *ptr) noexcept {
+    free(ptr);
 }
-void operator delete[](void * ptr) noexcept {
-  operator delete(ptr);
+void operator delete[](void *ptr) noexcept {
+    operator delete(ptr);
 }
 
 #if __cplusplus >= 201402L
-void operator delete(void* ptr, [[gnu::unused]] std::size_t size) noexcept {
-  operator delete(ptr);
+void operator delete(void *ptr, [[gnu::unused]] std::size_t size) noexcept {
+    operator delete(ptr);
 }
-void operator delete[](void * ptr, [[gnu::unused]] std::size_t size) noexcept {
-  operator delete[](ptr);
+void operator delete[](void *ptr, [[gnu::unused]] std::size_t size) noexcept {
+    operator delete[](ptr);
 }
 #endif // __cplusplus >= 201402L
 
-void operator delete(void* ptr, [[gnu::unused]] const std::nothrow_t& tag) noexcept {
-  operator delete(ptr);
+void operator delete(void                                 *ptr,
+                     [[gnu::unused]] const std::nothrow_t &tag) noexcept {
+    operator delete(ptr);
 }
-void operator delete[](void* ptr, [[gnu::unused]] const std::nothrow_t& tag) noexcept {
-  operator delete[](ptr);
+void operator delete[](void                                 *ptr,
+                       [[gnu::unused]] const std::nothrow_t &tag) noexcept {
+    operator delete[](ptr);
 }
 
-void operator delete(void* ptr, void* place) noexcept {
-  (void)ptr; (void)place; // unused
-  // Nothing to do
+void operator delete(void *ptr, void *place) noexcept {
+    (void)ptr;
+    (void)place; // unused
+                 // Nothing to do
 }
-void operator delete[](void* ptr, void* place) noexcept {
-  (void)ptr; (void)place; // unused
-  // Nothing to do
+void operator delete[](void *ptr, void *place) noexcept {
+    (void)ptr;
+    (void)place; // unused
+                 // Nothing to do
 }

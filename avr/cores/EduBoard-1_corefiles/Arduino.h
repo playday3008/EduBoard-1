@@ -28,23 +28,11 @@
 #include <avr/pgmspace.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
-//#include <avr/power.h>
-//#include <avr/sleep.h>
+
 #include "binary.h"
 
-// Use PROGMEM1 to place data in the memory between 64kB and 128kB
-// Use PROGMEM2 to place data in the memory between 128kB and 192kB
-// Use PROGMEM3 to place data in the memory between 192kB and 256kB
-#if FLASHEND >= 0x1FFFF
-  #define PROGMEM1 __attribute__((section(".FAR_MEM1")))
-#endif
-#if FLASHEND == 0x3FFFF
-  #define PROGMEM2 __attribute__((section(".FAR_MEM2")))
-  #define PROGMEM3 __attribute__((section(".FAR_MEM3")))
-#endif
-
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 void yield(void);
@@ -52,16 +40,16 @@ void yield(void);
 #define HIGH 0x1
 #define LOW  0x0
 
-#define INPUT 0x0
-#define OUTPUT 0x1
+#define INPUT        0x0
+#define OUTPUT       0x1
 #define INPUT_PULLUP 0x2
 
-#define PI 3.1415926535897932384626433832795
-#define HALF_PI 1.5707963267948966192313216916398
-#define TWO_PI 6.283185307179586476925286766559
+#define PI         3.1415926535897932384626433832795
+#define HALF_PI    1.5707963267948966192313216916398
+#define TWO_PI     6.283185307179586476925286766559
 #define DEG_TO_RAD 0.017453292519943295769236907684886
 #define RAD_TO_DEG 57.295779513082320876798154814105
-#define EULER 2.718281828459045235360287471352
+#define EULER      2.718281828459045235360287471352
 
 #define SERIAL  0x0
 #define DISPLAY 0x1
@@ -69,102 +57,45 @@ void yield(void);
 #define LSBFIRST 0
 #define MSBFIRST 1
 
-#define CHANGE 1
+#define CHANGE  1
 #define FALLING 2
-#define RISING 3
+#define RISING  3
 
-/* Analog reference definitions */
+#define DEFAULT      1 // Default -> AVCC with external capacitor at AREF pin
+#define EXTERNAL     0
+#define INTERNAL2V56 3
+#define INTERNAL     3
 
-// "Classic" series
-#if defined(__AVR_ATmega8535__) || defined(__AVR_ATmega8__)  || defined(__AVR_ATmega16__) \
-|| defined(__AVR_ATmega32__)    || defined(__AVR_ATmega64__) || defined(__AVR_ATmega128__)
-  #define EXTERNAL 0
-  #define DEFAULT 1 // Default -> AVCC with external capacitor at AREF pin
-  #define INTERNAL2V56 3
-  #define INTERNAL 3
-
-// 0/1 series
-#elif defined(__AVR_ATmega640__) || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1281__) \
-|| defined(__AVR_ATmega2560__)   || defined(__AVR_ATmega2561__)
-  #define EXTERNAL 0
-  #define DEFAULT 1 // Default -> AVCC with external capacitor at AREF pin
-  #define INTERNAL1V1 2
-  #define INTERNAL2V56 3
-  #define INTERNAL 3
-
-// 4 series
-#elif defined(__AVR_ATmega164A__) || defined(__AVR_ATmega164P__)  || defined(__AVR_ATmega324A__)  \
-|| defined(__AVR_ATmega324P__)    || defined(__AVR_ATmega324PA__) || defined(__AVR_ATmega324PB__) \
-|| defined(__AVR_ATmega644A__)    || defined(__AVR_ATmega644P__)  || defined(__AVR_ATmega1284__)  \
-|| defined(__AVR_ATmega1284P__)
-  #define EXTERNAL 0
-  #define DEFAULT 1 // Default -> AVCC with external capacitor at AREF pin
-  #define INTERNAL1V1 2
-  #define INTERNAL2V56 3
-  #define INTERNAL 3
-
-// 5 series
-#elif defined(__AVR_ATmega165__) || defined(__AVR_ATmega165A__)  || defined(__AVR_ATmega165P__)   \
-|| defined(__AVR_ATmega165PA__)  || defined(__AVR_ATmega325__)   || defined(__AVR_ATmega325A__)   \
-|| defined(__AVR_ATmega325P__)   || defined(__AVR_ATmega325PA__) || defined(__AVR_ATmega3250__)   \
-|| defined(__AVR_ATmega3250A__)  || defined(__AVR_ATmega3250P__) || defined(__AVR_ATmega3250PA__) \
-|| defined(__AVR_ATmega645__)    || defined(__AVR_ATmega645A__)  || defined(__AVR_ATmega645P__)   \
-|| defined(__AVR_ATmega6450__)   || defined(__AVR_ATmega6450A__) || defined(__AVR_ATmega6450P__)
-  #define EXTERNAL 0
-  #define DEFAULT 1 // Default -> AVCC with external capacitor at AREF pin
-  #define INTERNAL1V1 3
-  #define INTERNAL 3
-
-// 8 series
-#elif defined(__AVR_ATmega48__) || defined(__AVR_ATmega48P__)  || defined(__AVR_ATmega48PB__)  \
-|| defined(__AVR_ATmega88__)    || defined(__AVR_ATmega88P__)  || defined(__AVR_ATmega88PB__)  \
-|| defined(__AVR_ATmega168__)   || defined(__AVR_ATmega168P__) || defined(__AVR_ATmega168PB__) \
-|| defined(__AVR_ATmega328__)   || defined(__AVR_ATmega328P__) || defined(__AVR_ATmega328PB__)
-  #define EXTERNAL 0
-  #define DEFAULT 1 // Default -> AVCC with external capacitor at AREF pin
-  #define INTERNAL1V1 3
-  #define INTERNAL 3
-
-// 9 series
-#elif defined(__AVR_ATmega169__) || defined(__AVR_ATmega169A__)  || defined(__AVR_ATmega169P__)   \
-|| defined(__AVR_ATmega169PA__)  || defined(__AVR_ATmega329__)   || defined(__AVR_ATmega329A__)   \
-|| defined(__AVR_ATmega329P__)   || defined(__AVR_ATmega329PA__) || defined(__AVR_ATmega3290__)   \
-|| defined(__AVR_ATmega3290A__)  || defined(__AVR_ATmega3290P__) || defined(__AVR_ATmega3290PA__) \
-|| defined(__AVR_ATmega649__)    || defined(__AVR_ATmega649A__)  || defined(__AVR_ATmega649P__)   \
-|| defined(__AVR_ATmega6490__)   || defined(__AVR_ATmega6490A__) || defined(__AVR_ATmega6490P__)
-  #define EXTERNAL 0
-  #define DEFAULT 1 // Default -> AVCC with external capacitor at AREF pin
-  #define INTERNAL1V1 3
-  #define INTERNAL 3
-
-#endif
-
-#define interrupts() sei()
+#define interrupts()   sei()
 #define noInterrupts() cli()
 
-#define clockCyclesPerMicrosecond() ( F_CPU / 1000000L )
-#define clockCyclesToMicroseconds(a) ( (a) / clockCyclesPerMicrosecond() )
-#define microsecondsToClockCycles(a) ( (a) * clockCyclesPerMicrosecond() )
+#define clockCyclesPerMicrosecond()  (F_CPU / 1000000L)
+#define clockCyclesToMicroseconds(a) ((a) / clockCyclesPerMicrosecond())
+#define microsecondsToClockCycles(a) ((a) * clockCyclesPerMicrosecond())
 
-#define lowByte(w) ((uint8_t) ((w) & 0xff))
-#define highByte(w) ((uint8_t) ((w) >> 8))
+#define lowByte(w)  ((uint8_t)((w) & 0xff))
+#define highByte(w) ((uint8_t)((w) >> 8))
 
-#define bitRead(value, bit) (((value) >> (bit)) & 0x01)
-#define bitSet(value, bit) ((value) |= (1UL << (bit)))
-#define bitClear(value, bit) ((value) &= ~(1UL << (bit)))
+#define bitRead(value, bit)   (((value) >> (bit)) & 0x01)
+#define bitSet(value, bit)    ((value) |= (1UL << (bit)))
+#define bitClear(value, bit)  ((value) &= ~(1UL << (bit)))
 #define bitToggle(value, bit) ((value) ^= (1UL << (bit)))
-#define bitWrite(value, bit, bitvalue) ((bitvalue) ? bitSet(value, bit) : bitClear(value, bit))
+#define bitWrite(value, bit, bitvalue) \
+    ((bitvalue) ? bitSet(value, bit) : bitClear(value, bit))
 
 // avr-libc defines _NOP() since 1.6.2
 #ifndef _NOP
-#define _NOP() do { __asm__ volatile ("nop"); } while (0)
+#    define _NOP()                   \
+        do {                         \
+            __asm__ volatile("nop"); \
+        } while (0)
 #endif
 
 typedef unsigned int word;
 
 #define bit(b) (1UL << (b))
 
-typedef bool boolean;
+typedef bool    boolean;
 typedef uint8_t byte;
 
 void init(void);
@@ -174,15 +105,15 @@ int atexit(void (*func)()) __attribute__((weak));
 
 void pinMode(uint8_t pin, uint8_t mode);
 void digitalWrite(uint8_t pin, uint8_t state);
-int digitalRead(uint8_t pin);
-int analogRead(uint8_t pin);
+int  digitalRead(uint8_t pin);
+int  analogRead(uint8_t pin);
 void analogReference(uint8_t mode);
 void analogWrite(uint8_t pin, int value);
 
 unsigned long millis(void);
 unsigned long micros(void);
-void delay(unsigned long ms);
-void delayMicroseconds(unsigned int us) __attribute__ ((noinline));
+void          delay(unsigned long ms);
+void          delayMicroseconds(unsigned int us) __attribute__((noinline));
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout);
 unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout);
 
@@ -211,50 +142,47 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 //
 // These perform slightly better as macros compared to inline functions
 //
-#define digitalPinToPort(P) ( pgm_read_byte( digital_pin_to_port_PGM + (P) ) )
-#define digitalPinToBitMask(P) ( pgm_read_byte( digital_pin_to_bit_mask_PGM + (P) ) )
-#define digitalPinToTimer(P) ( pgm_read_byte( digital_pin_to_timer_PGM + (P) ) )
-#define analogInPinToBit(P) (P)
-#define portOutputRegister(P) ( (volatile uint8_t *)( pgm_read_word( port_to_output_PGM + (P))) )
-#define portInputRegister(P) ( (volatile uint8_t *)( pgm_read_word( port_to_input_PGM + (P))) )
-#define portModeRegister(P) ( (volatile uint8_t *)( pgm_read_word( port_to_mode_PGM + (P))) )
+#define digitalPinToPort(P) (pgm_read_byte(digital_pin_to_port_PGM + (P)))
+#define digitalPinToBitMask(P) \
+    (pgm_read_byte(digital_pin_to_bit_mask_PGM + (P)))
+#define digitalPinToTimer(P) (pgm_read_byte(digital_pin_to_timer_PGM + (P)))
+#define analogInPinToBit(P)  (P)
+#define portOutputRegister(P) \
+    ((volatile uint8_t *)(pgm_read_word(port_to_output_PGM + (P))))
+#define portInputRegister(P) \
+    ((volatile uint8_t *)(pgm_read_word(port_to_input_PGM + (P))))
+#define portModeRegister(P) \
+    ((volatile uint8_t *)(pgm_read_word(port_to_mode_PGM + (P))))
 
-#define NOT_A_PIN 0
+#define NOT_A_PIN  0
 #define NOT_A_PORT 0
 
 #define NOT_AN_INTERRUPT -1
 
 #ifdef ARDUINO_MAIN
-#define PA 1
-#define PB 2
-#define PC 3
-#define PD 4
-
-// Fix compiler warning for ATmega8/8535/16/32
-#if defined(__AVR_ATmega8__) || defined(__AVR_ATmega8535__) || defined(__AVR_ATmega16__) \
-|| defined(__AVR_ATmega32__) || defined(__AVR_ATmega8515__)
-#else
-#define PE 5
-#endif
-
-#define PF 6
-#define PG 7
-#define PH 8
-#define PJ 10
-#define PK 11
-#define PL 12
+#    define PA 1
+#    define PB 2
+#    define PC 3
+#    define PD 4
+#    define PE 5
+#    define PF 6
+#    define PG 7
+#    define PH 8
+#    define PJ 10
+#    define PK 11
+#    define PL 12
 #endif
 
 #define NOT_ON_TIMER 0
-#define TIMER0  1 //Needed for ATmega64/128 and ATmega8515/162
-#define TIMER0A 2
-#define TIMER0B 3
-#define TIMER1A 4
-#define TIMER1B 5
-#define TIMER1C 6
-#define TIMER2  7
-#define TIMER2A 8
-#define TIMER2B 9
+#define TIMER0       1 // Needed for ATmega64/128 and ATmega8515/162
+#define TIMER0A      2
+#define TIMER0B      3
+#define TIMER1A      4
+#define TIMER1B      5
+#define TIMER1C      6
+#define TIMER2       7
+#define TIMER2A      8
+#define TIMER2B      9
 
 #define TIMER3A 10
 #define TIMER3B 11
@@ -268,23 +196,23 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 #define TIMER5C 19
 
 /* Power management constants */
-#define POWER_ADC 0
-#define POWER_SPI 1
-#define POWER_WIRE 2
-#define POWER_TIMER0 3
-#define POWER_TIMER1 4
-#define POWER_TIMER2 5
-#define POWER_TIMER3 6
+#define POWER_ADC     0
+#define POWER_SPI     1
+#define POWER_WIRE    2
+#define POWER_TIMER0  3
+#define POWER_TIMER1  4
+#define POWER_TIMER2  5
+#define POWER_TIMER3  6
 #define POWER_SERIAL0 7
 #define POWER_SERIAL1 8
-#define POWER_ALL 9
+#define POWER_ALL     9
 
 /* Sleep management constants */
-#define SLEEP_IDLE 0
-#define SLEEP_ADC 1
-#define SLEEP_POWER_DOWN 2
-#define SLEEP_POWER_SAVE 3
-#define SLEEP_STANDBY 4
+#define SLEEP_IDLE             0
+#define SLEEP_ADC              1
+#define SLEEP_POWER_DOWN       2
+#define SLEEP_POWER_SAVE       3
+#define SLEEP_STANDBY          4
 #define SLEEP_EXTENDED_STANDBY 5
 
 #ifdef __cplusplus
@@ -293,62 +221,84 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 
 // Undefine stdlib's abs if encountered
 #ifdef abs
-  #undef abs
+#    undef abs
 #endif
 
 #ifdef __cplusplus
-	template<class T>
-	auto abs(const T& x) -> decltype(x > 0 ? x : -x) {
-		return x > 0 ? x : -x;
-	}
+template<class T>
+auto abs(const T &x) -> decltype(x > 0 ? x : -x) {
+    return x > 0 ? x : -x;
+}
 
-	template<class T, class L>
-	auto min(const T& a, const L& b) -> decltype((b < a) ? b : a) {
-		return (b < a) ? b : a;
-	}
+template<class T, class L>
+auto min(const T &a, const L &b) -> decltype((b < a) ? b : a) {
+    return (b < a) ? b : a;
+}
 
-	template<class T, class L>
-	auto max(const T& a, const L& b) -> decltype((b < a) ? b : a) {
-		return (a < b) ? b : a;
-	}
+template<class T, class L>
+auto max(const T &a, const L &b) -> decltype((b < a) ? b : a) {
+    return (a < b) ? b : a;
+}
 
-	template<class T>
-	long round(const T& x) {
-		return (long)(x >= 0 ? (x + 0.5) : (x - 0.5));
-	}
+template<class T>
+long round(const T &x) {
+    return (long)(x >= 0 ? (x + 0.5) : (x - 0.5));
+}
 
-	template<class T>
-	auto sq(const T& x) -> decltype(x * x) {
-		return x * x;
-	}
+template<class T>
+auto sq(const T &x) -> decltype(x * x) {
+    return x * x;
+}
 
-  template<class T>
-  auto radians(const T& deg) -> decltype(deg * DEG_TO_RAD) {
+template<class T>
+auto radians(const T &deg) -> decltype(deg * DEG_TO_RAD) {
     return deg * DEG_TO_RAD;
-  }
+}
 
-  template<class T>
-  auto degrees(const T& rad) -> decltype(rad * RAD_TO_DEG) {
+template<class T>
+auto degrees(const T &rad) -> decltype(rad * RAD_TO_DEG) {
     return rad * RAD_TO_DEG;
-  }
+}
 
-  template<class T, class L, class H>
-	auto constrain(const T& x, const L& l, const H& h) -> decltype((x < l) ? l : (x > h) ? h : x) {
-		return (x < l) ? l : (x > h) ? h : x;
-	}
+template<class T, class L, class H>
+auto constrain(const T &x, const L &l, const H &h) -> decltype((x < l)   ? l
+                                                               : (x > h) ? h
+                                                                         : x) {
+    return (x < l) ? l : (x > h) ? h : x;
+}
 
 #else
-  #define abs(x)       ({ typeof (x) _x = (x); _x > 0 ? _x : -_x; })
-  #define min(a,b)     ({ typeof (a) _a = (a); typeof (b) _b = (b); _a < _b ? _a : _b; })
-  #define max(a,b)     ({ typeof (a) _a = (a); typeof (b) _b = (b); _a > _b ? _a : _b; })
-  #define sq(x)        ({ typeof (x) _x = (x); _x * _x; })
-  #define radians(deg) ((deg) * DEG_TO_RAD)
-  #define degrees(rad) ((rad) * RAD_TO_DEG)
-  #define constrain(x,low,high)     ({ \
-  typeof (x) _x = (x);               \
-  typeof (low) _l = (low);           \
-  typeof (high) _h = (high);         \
-  _x < _l ? _l : _x > _h ? _h : _x; })
+#define abs(x)              \
+    ({                      \
+        typeof(x) _x = (x); \
+        _x > 0 ? _x : -_x;  \
+    })
+#define min(a, b)           \
+    ({                      \
+        typeof(a) _a = (a); \
+        typeof(b) _b = (b); \
+        _a < _b ? _a : _b;  \
+    })
+#define max(a, b)           \
+    ({                      \
+        typeof(a) _a = (a); \
+        typeof(b) _b = (b); \
+        _a > _b ? _a : _b;  \
+    })
+#define sq(x)               \
+    ({                      \
+        typeof(x) _x = (x); \
+        _x       *_x;       \
+    })
+#define radians(deg) ((deg) * DEG_TO_RAD)
+#define degrees(rad) ((rad) * RAD_TO_DEG)
+#define constrain(x, low, high)        \
+    ({                                 \
+        typeof(x)    _x = (x);         \
+        typeof(low)  _l = (low);       \
+        typeof(high) _h = (high);      \
+        _x<_l ? _l : _x> _h ? _h : _x; \
+    })
 #endif // __cplusplus
 
 #ifdef __cplusplus
@@ -358,9 +308,8 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 #include "USBAPI.h"
 #include "wiring_extras.h"
 
-
 #if defined(HAVE_HWSERIAL0) && defined(HAVE_CDCSERIAL)
-#error "Targets with both UART0 and CDC serial not supported"
+#    error "Targets with both UART0 and CDC serial not supported"
 #endif
 
 uint16_t makeWord(uint16_t w);
@@ -368,8 +317,10 @@ uint16_t makeWord(byte h, byte l);
 
 #define word(...) makeWord(__VA_ARGS__)
 
-unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
-unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
+unsigned long
+    pulseIn(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
+unsigned long
+    pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
 
 void tone(uint8_t pin, unsigned int frequency, unsigned long duration = 0);
 void noTone(uint8_t pin);
@@ -384,4 +335,4 @@ long map(long value, long fromLow, long fromHigh, long toLow, long toHigh);
 
 #include "pins_arduino.h"
 
-#endif
+#endif // Arduino_h

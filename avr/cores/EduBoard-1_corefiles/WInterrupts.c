@@ -31,94 +31,86 @@
 
 #include "wiring_private.h"
 
-static void nothing(void)
-{
-}
+static void nothing(void) {}
 
-static volatile voidFuncPtr intFunc[EXTERNAL_NUM_INTERRUPTS] =
-{
-  #if EXTERNAL_NUM_INTERRUPTS > 8
-    #warning There are more than 8 external interrupts. Some callbacks may not be initialized.
+static volatile voidFuncPtr intFunc[EXTERNAL_NUM_INTERRUPTS] = {
+#if EXTERNAL_NUM_INTERRUPTS > 8
+#warning There are more than 8 external interrupts. Some callbacks may not be initialized.
     nothing,
-  #elif EXTERNAL_NUM_INTERRUPTS > 7
+#elif EXTERNAL_NUM_INTERRUPTS > 7
     nothing,
-  #elif EXTERNAL_NUM_INTERRUPTS > 6
+#elif EXTERNAL_NUM_INTERRUPTS > 6
     nothing,
-  #elif EXTERNAL_NUM_INTERRUPTS > 5
+#elif EXTERNAL_NUM_INTERRUPTS > 5
     nothing,
-  #elif EXTERNAL_NUM_INTERRUPTS > 4
+#elif EXTERNAL_NUM_INTERRUPTS > 4
     nothing,
-  #elif EXTERNAL_NUM_INTERRUPTS > 3
+#elif EXTERNAL_NUM_INTERRUPTS > 3
     nothing,
-  #elif EXTERNAL_NUM_INTERRUPTS > 2
+#elif EXTERNAL_NUM_INTERRUPTS > 2
     nothing,
-  #elif EXTERNAL_NUM_INTERRUPTS > 1
+#elif EXTERNAL_NUM_INTERRUPTS > 1
     nothing,
-  #elif EXTERNAL_NUM_INTERRUPTS > 0
+#elif EXTERNAL_NUM_INTERRUPTS > 0
     nothing,
-  #endif
+#endif
 };
 
-void attachInterrupt(uint8_t interruptNum, void (*userFunc)(void), int mode)
-{
-  if(interruptNum < EXTERNAL_NUM_INTERRUPTS)
-  {
-    intFunc[interruptNum] = userFunc;
+void attachInterrupt(uint8_t interruptNum, void (*userFunc)(void), int mode) {
+    if (interruptNum < EXTERNAL_NUM_INTERRUPTS) {
+        intFunc[interruptNum] = userFunc;
 
-    // Configure the interrupt mode (trigger on low input, any change, rising
-    // edge, or falling edge).  The mode constants were chosen to correspond
-    // to the configuration bits in the hardware register, so we simply shift
-    // the mode into place.
+        // Configure the interrupt mode (trigger on low input, any change,
+        // rising edge, or falling edge).  The mode constants were chosen to
+        // correspond to the configuration bits in the hardware register, so we
+        // simply shift the mode into place.
 
-    // Enable interrupt
-    switch(interruptNum)
-    {
-        case 0:
-          MCUCR = (MCUCR & ~((1 << ISC00) | (1 << ISC01))) | (mode << ISC00);
-          GICR |= (1 << INT0);
-          break;
-        case 1:
-          MCUCR = (MCUCR & ~((1 << ISC10) | (1 << ISC11))) | (mode << ISC10);
-          GICR |= (1 << INT1);
-          break;
-        case 2:
-            MCUCSR = (MCUCSR & ~((1 << ISC2))) | ((mode & 0x01) << ISC2); // ATmega8535/16/32
-            GICR |= (1 << INT2);
-          break;
+        // Enable interrupt
+        switch (interruptNum) {
+            case 0:
+                MCUCR = (MCUCR & ~((1 << ISC00) | (1 << ISC01))) |
+                        (mode << ISC00);
+                GICR |= (1 << INT0);
+                break;
+            case 1:
+                MCUCR = (MCUCR & ~((1 << ISC10) | (1 << ISC11))) |
+                        (mode << ISC10);
+                GICR |= (1 << INT1);
+                break;
+            case 2:
+                MCUCSR = (MCUCSR & ~((1 << ISC2))) |
+                         ((mode & 0x01) << ISC2); // ATmega8535/16/32
+                GICR |= (1 << INT2);
+                break;
+        }
     }
-  }
 }
 
-void detachInterrupt(uint8_t interruptNum)
-{
-  if(interruptNum < EXTERNAL_NUM_INTERRUPTS)
-  {
-    // Disable interrupt
-    switch(interruptNum)
-    {
-        case 0:
-          GICR &= ~(1 << INT0);
-          break;
-        case 1:
-          GICR &= ~(1 << INT1);
-          break;
-        case 2:
-          GICR &= ~(1 << INT2);
-          break;
+void detachInterrupt(uint8_t interruptNum) {
+    if (interruptNum < EXTERNAL_NUM_INTERRUPTS) {
+        // Disable interrupt
+        switch (interruptNum) {
+            case 0:
+                GICR &= ~(1 << INT0);
+                break;
+            case 1:
+                GICR &= ~(1 << INT1);
+                break;
+            case 2:
+                GICR &= ~(1 << INT2);
+                break;
+        }
+        intFunc[interruptNum] = nothing;
     }
-    intFunc[interruptNum] = nothing;
-  }
 }
-
 
 #define IMPLEMENT_ISR(vect, interrupt) \
-  ISR(vect) { \
-    intFunc[interrupt](); \
-  }
+    ISR(vect) {                        \
+        intFunc[interrupt]();          \
+    }
 
 IMPLEMENT_ISR(INT0_vect, EXTERNAL_INT_0)
 IMPLEMENT_ISR(INT1_vect, EXTERNAL_INT_1)
-
 
 /*
 volatile static voidFuncPtr twiIntFunc;
