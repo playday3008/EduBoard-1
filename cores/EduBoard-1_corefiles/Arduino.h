@@ -165,7 +165,7 @@ extern const uint8_t PROGMEM digital_pin_to_timer_PGM[];
 #    define PC 3
 #    define PD 4
 // Fix compiler warning for ATmega8/8535/16/32
-#    ifdef PE
+#    ifndef PE
 #        define PE 5
 #    endif
 #    define PF 6
