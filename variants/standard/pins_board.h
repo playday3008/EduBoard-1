@@ -12,10 +12,10 @@
 #define PIN_SW_5    (4)
 
 // Potentiometer 1 (POT1)
-#define PIN_POT1 (A0)
+#define PIN_POT_1 (A0)
 
 // Potentiometer 2 (POT2)
-#define PIN_POT2 (A1)
+#define PIN_POT_2 (A1)
 
 // 5-Way Tactile Switch (JOY)
 #define PIN_JOY_MODE  (INPUT_PULLUP)
