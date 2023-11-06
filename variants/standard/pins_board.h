@@ -68,18 +68,17 @@
 #define PIN_LCD_BL (23)
 
 // Clock and calendar with 240 x 8-bit RAM (RTC) (I2C) (PCF8583)
-#define PIN_RTC_SDA  (17)
-#define PIN_RTC_SCL  (16)
+#define PIN_RTC_SDA  (PIN_WIRE_SDA)
+#define PIN_RTC_SCL  (PIN_WIRE_SCL)
 #define PIN_RTC_ADDR (0b1010000)
 
 // 12-Bit Voltage Output Digital-to-Analog Converter with SPI Interface (DAC) (SPI) (MCP4921)
-#define PIN_DAC_SCK  (7)
-#define PIN_DAC_SDI  (5)
-#define PIN_DAC_VOUT (15)
+#define PIN_DAC_SCK  (PIN_SPI_SCK)
+#define PIN_DAC_SDI  (PIN_SPI_MOSI)
 
 // 2-Wire Serial Temperature Sensor (TEMP) (I2C) (TCN75AV)
-#define PIN_TEMP_SDA  (17)
-#define PIN_TEMP_SCL  (16)
+#define PIN_TEMP_SDA  (PIN_WIRE_SDA)
+#define PIN_TEMP_SCL  (PIN_WIRE_SCL)
 #define PIN_TEMP_ADDR (0b1001111)
 
 #endif // Pins_Board_h
