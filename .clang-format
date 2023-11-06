@@ -37,7 +37,7 @@ FixNamespaceComments: 'true'
 IncludeBlocks: Preserve
 IndentCaseLabels: 'true'
 IndentPPDirectives: AfterHash
-IndentWidth: '4'
+IndentWidth: '2'
 IndentWrappedFunctionNames: 'true'
 KeepEmptyLinesAtTheStartOfBlocks: 'false'
 Language: Cpp
