@@ -337,5 +337,6 @@ long map(long value, long fromLow, long fromHigh, long toLow, long toHigh);
 #endif
 
 #include "pins_arduino.h"
+#include "pins_board.h"
 
 #endif // Arduino_h
