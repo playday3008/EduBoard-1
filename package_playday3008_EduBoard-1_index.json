@@ -98,6 +98,66 @@
               "version": "7.2-arduino.1"
             }
           ]
+        },
+        {
+          "name": "EduBoard-1",
+          "architecture": "avr",
+          "version": "1.1.0",
+          "category": "Contributed",
+          "url": "https://github.com/playday3008/EduBoard-1/archive/refs/tags/v1.1.0.tar.gz",
+          "archiveFileName": "EduBoard-1-1.1.0.tar.gz",
+          "checksum": "SHA-256:9adc41dd725de818da2550af82d64c7d88753bfc7886c2b8eeeea7adda151024",
+          "size": "147598",
+          "boards": [
+            {
+              "name": "ATmega32"
+            },
+            {
+              "name": "ATmega16"
+            }
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "arduino",
+              "name": "avr-gcc",
+              "version": "7.3.0-atmel3.6.1-arduino7"
+            },
+            {
+              "packager": "EduBoard-1",
+              "name": "avrdude",
+              "version": "7.2-arduino.1"
+            }
+          ]
+        },
+        {
+          "name": "EduBoard-1",
+          "architecture": "avr",
+          "version": "1.2.0",
+          "category": "Contributed",
+          "url": "https://github.com/playday3008/EduBoard-1/archive/refs/tags/v1.2.0.tar.gz",
+          "archiveFileName": "EduBoard-1-1.2.0.tar.gz",
+          "checksum": "SHA-256:567e566bc2521b8487b70d37c29f5c6664554be5750e9a0c893c634e4c097e88",
+          "size": "261210",
+          "boards": [
+            {
+              "name": "ATmega32"
+            },
+            {
+              "name": "ATmega16"
+            }
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "arduino",
+              "name": "avr-gcc",
+              "version": "7.3.0-atmel3.6.1-arduino7"
+            },
+            {
+              "packager": "EduBoard-1",
+              "name": "avrdude",
+              "version": "7.2-arduino.1"
+            }
+          ]
         }
       ],
       "tools": [
