@@ -27,34 +27,6 @@ menu.bootloader=Bootloader
 32.build.variant=standard
 
 # Bootloader
-32.menu.bootloader.no_bootloader=No bootloader
-32.menu.bootloader.no_bootloader.upload.maximum_size=32768
-32.menu.bootloader.no_bootloader.build.export_merged_output=false
-32.menu.bootloader.no_bootloader.bootloader.file=empty/empty.hex
-32.menu.bootloader.no_bootloader.bootloader.lock_bootldr_bit=1
-32.menu.bootloader.no_bootloader.bootloader.bootsz_bits=11
-32.menu.bootloader.no_bootloader.bootloader.bootrst_bit=1
-
-32.menu.bootloader.sw=SW (w/o EEPROM rw and chip erase support) (256 words)
-32.menu.bootloader.sw.upload.maximum_size=32512
-32.menu.bootloader.sw.upload.protocol=urclock
-32.menu.bootloader.sw.upload.uartpins=uart0_rxd0_txd1
-32.menu.bootloader.sw.build.export_merged_output=true
-32.menu.bootloader.sw.bootloader.file=urboot/urboot_m32_1s_autobaud_{upload.uartpins}_no-led_pr.hex
-32.menu.bootloader.sw.bootloader.lock_bootldr_bit=1
-32.menu.bootloader.sw.bootloader.bootsz_bits=11
-32.menu.bootloader.sw.bootloader.bootrst_bit=1
-
-32.menu.bootloader.sw_w_eeprom_erase=SW (w/ EEPROM rw and chip erase support) (384 words)
-32.menu.bootloader.sw_w_eeprom_erase.upload.maximum_size=32384
-32.menu.bootloader.sw_w_eeprom_erase.upload.protocol=urclock
-32.menu.bootloader.sw_w_eeprom_erase.upload.uartpins=uart0_rxd0_txd1
-32.menu.bootloader.sw_w_eeprom_erase.build.export_merged_output=true
-32.menu.bootloader.sw_w_eeprom_erase.bootloader.file=urboot/urboot_m32_1s_autobaud_{upload.uartpins}_no-led_pr_ee_ce.hex
-32.menu.bootloader.sw_w_eeprom_erase.bootloader.lock_bootldr_bit=1
-32.menu.bootloader.sw_w_eeprom_erase.bootloader.bootsz_bits=11
-32.menu.bootloader.sw_w_eeprom_erase.bootloader.bootrst_bit=1
-
 32.menu.bootloader.hw_w_eeprom_erase=HW (w/ EEPROM rw and chip erase support) (512 words)
 32.menu.bootloader.hw_w_eeprom_erase.upload.maximum_size=32256
 32.menu.bootloader.hw_w_eeprom_erase.upload.protocol=urclock
@@ -74,6 +46,34 @@ menu.bootloader=Bootloader
 32.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.bootloader.lock_bootldr_bit=0
 32.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.bootloader.bootsz_bits=10
 32.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.bootloader.bootrst_bit=0
+
+32.menu.bootloader.sw_w_eeprom_erase=SW (w/ EEPROM rw and chip erase support) (384 words)
+32.menu.bootloader.sw_w_eeprom_erase.upload.maximum_size=32384
+32.menu.bootloader.sw_w_eeprom_erase.upload.protocol=urclock
+32.menu.bootloader.sw_w_eeprom_erase.upload.uartpins=uart0_rxd0_txd1
+32.menu.bootloader.sw_w_eeprom_erase.build.export_merged_output=true
+32.menu.bootloader.sw_w_eeprom_erase.bootloader.file=urboot/urboot_m32_1s_autobaud_{upload.uartpins}_no-led_pr_ee_ce.hex
+32.menu.bootloader.sw_w_eeprom_erase.bootloader.lock_bootldr_bit=1
+32.menu.bootloader.sw_w_eeprom_erase.bootloader.bootsz_bits=11
+32.menu.bootloader.sw_w_eeprom_erase.bootloader.bootrst_bit=1
+
+32.menu.bootloader.sw=SW (w/o EEPROM rw and chip erase support) (256 words)
+32.menu.bootloader.sw.upload.maximum_size=32512
+32.menu.bootloader.sw.upload.protocol=urclock
+32.menu.bootloader.sw.upload.uartpins=uart0_rxd0_txd1
+32.menu.bootloader.sw.build.export_merged_output=true
+32.menu.bootloader.sw.bootloader.file=urboot/urboot_m32_1s_autobaud_{upload.uartpins}_no-led_pr.hex
+32.menu.bootloader.sw.bootloader.lock_bootldr_bit=1
+32.menu.bootloader.sw.bootloader.bootsz_bits=11
+32.menu.bootloader.sw.bootloader.bootrst_bit=1
+
+32.menu.bootloader.no_bootloader=No bootloader
+32.menu.bootloader.no_bootloader.upload.maximum_size=32768
+32.menu.bootloader.no_bootloader.build.export_merged_output=false
+32.menu.bootloader.no_bootloader.bootloader.file=empty/empty.hex
+32.menu.bootloader.no_bootloader.bootloader.lock_bootldr_bit=1
+32.menu.bootloader.no_bootloader.bootloader.bootsz_bits=11
+32.menu.bootloader.no_bootloader.bootloader.bootrst_bit=1
 
 # EEPROM
 32.menu.eeprom.keep=EEPROM retained
@@ -124,23 +124,25 @@ menu.bootloader=Bootloader
 16.build.variant=standard
 
 # Bootloader
-16.menu.bootloader.no_bootloader=No bootloader
-16.menu.bootloader.no_bootloader.upload.maximum_size=16384
-16.menu.bootloader.no_bootloader.build.export_merged_output=false
-16.menu.bootloader.no_bootloader.bootloader.file=empty/empty.hex
-16.menu.bootloader.no_bootloader.bootloader.lock_bootldr_bit=1
-16.menu.bootloader.no_bootloader.bootloader.bootsz_bits=11
-16.menu.bootloader.no_bootloader.bootloader.bootrst_bit=1
+16.menu.bootloader.hw_w_eeprom_erase=HW (w/ EEPROM rw and chip erase support) (512 words)
+16.menu.bootloader.hw_w_eeprom_erase.upload.maximum_size=15872
+16.menu.bootloader.hw_w_eeprom_erase.upload.protocol=urclock
+16.menu.bootloader.hw_w_eeprom_erase.upload.uartpins=uart0_rxd0_txd1
+16.menu.bootloader.hw_w_eeprom_erase.build.export_merged_output=true
+16.menu.bootloader.hw_w_eeprom_erase.bootloader.file=urboot/urboot_m16_1s_autobaud_{upload.uartpins}_no-led_ee_ce_hw.hex
+16.menu.bootloader.hw_w_eeprom_erase.bootloader.lock_bootldr_bit=0
+16.menu.bootloader.hw_w_eeprom_erase.bootloader.bootsz_bits=01
+16.menu.bootloader.hw_w_eeprom_erase.bootloader.bootrst_bit=0
 
-16.menu.bootloader.sw=SW (w/o EEPROM rw and chip erase support) (256 words)
-16.menu.bootloader.sw.upload.maximum_size=16128
-16.menu.bootloader.sw.upload.protocol=urclock
-16.menu.bootloader.sw.upload.uartpins=uart0_rxd0_txd1
-16.menu.bootloader.sw.build.export_merged_output=true
-16.menu.bootloader.sw.bootloader.file=urboot/urboot_m16_1s_autobaud_{upload.uartpins}_no-led_pr.hex
-16.menu.bootloader.sw.bootloader.lock_bootldr_bit=1
-16.menu.bootloader.sw.bootloader.bootsz_bits=11
-16.menu.bootloader.sw.bootloader.bootrst_bit=1
+16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1=HW (w/ EEPROM rw, chip erase support and STK500v1 protocol) (512 words)
+16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.upload.maximum_size=15872
+16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.upload.protocol=stk500v1
+16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.upload.uartpins=uart0_rxd0_txd1
+16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.build.export_merged_output=true
+16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.bootloader.file=urboot/urboot_m16_1s_autobaud_{upload.uartpins}_no-led_ee_ce_hw_stk500.hex
+16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.bootloader.lock_bootldr_bit=0
+16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.bootloader.bootsz_bits=01
+16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.bootloader.bootrst_bit=0
 
 16.menu.bootloader.sw_w_eeprom_erase=SW (w/ EEPROM rw and chip erase support) (384 words)
 16.menu.bootloader.sw_w_eeprom_erase.upload.maximum_size=16000
@@ -162,25 +164,24 @@ menu.bootloader=Bootloader
 16.menu.bootloader.hw.bootloader.bootsz_bits=10
 16.menu.bootloader.hw.bootloader.bootrst_bit=0
 
-16.menu.bootloader.hw_w_eeprom_erase=HW (w/ EEPROM rw and chip erase support) (512 words)
-16.menu.bootloader.hw_w_eeprom_erase.upload.maximum_size=15872
-16.menu.bootloader.hw_w_eeprom_erase.upload.protocol=urclock
-16.menu.bootloader.hw_w_eeprom_erase.upload.uartpins=uart0_rxd0_txd1
-16.menu.bootloader.hw_w_eeprom_erase.build.export_merged_output=true
-16.menu.bootloader.hw_w_eeprom_erase.bootloader.file=urboot/urboot_m16_1s_autobaud_{upload.uartpins}_no-led_ee_ce_hw.hex
-16.menu.bootloader.hw_w_eeprom_erase.bootloader.lock_bootldr_bit=0
-16.menu.bootloader.hw_w_eeprom_erase.bootloader.bootsz_bits=01
-16.menu.bootloader.hw_w_eeprom_erase.bootloader.bootrst_bit=0
+16.menu.bootloader.sw=SW (w/o EEPROM rw and chip erase support) (256 words)
+16.menu.bootloader.sw.upload.maximum_size=16128
+16.menu.bootloader.sw.upload.protocol=urclock
+16.menu.bootloader.sw.upload.uartpins=uart0_rxd0_txd1
+16.menu.bootloader.sw.build.export_merged_output=true
+16.menu.bootloader.sw.bootloader.file=urboot/urboot_m16_1s_autobaud_{upload.uartpins}_no-led_pr.hex
+16.menu.bootloader.sw.bootloader.lock_bootldr_bit=1
+16.menu.bootloader.sw.bootloader.bootsz_bits=11
+16.menu.bootloader.sw.bootloader.bootrst_bit=1
 
-16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1=HW (w/ EEPROM rw, chip erase support and STK500v1 protocol) (512 words)
-16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.upload.maximum_size=15872
-16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.upload.protocol=stk500v1
-16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.upload.uartpins=uart0_rxd0_txd1
-16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.build.export_merged_output=true
-16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.bootloader.file=urboot/urboot_m16_1s_autobaud_{upload.uartpins}_no-led_ee_ce_hw_stk500.hex
-16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.bootloader.lock_bootldr_bit=0
-16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.bootloader.bootsz_bits=01
-16.menu.bootloader.hw_w_eeprom_erase_w_stk500v1.bootloader.bootrst_bit=0
+16.menu.bootloader.no_bootloader=No bootloader
+16.menu.bootloader.no_bootloader.upload.maximum_size=16384
+16.menu.bootloader.no_bootloader.build.export_merged_output=false
+16.menu.bootloader.no_bootloader.bootloader.file=empty/empty.hex
+16.menu.bootloader.no_bootloader.bootloader.lock_bootldr_bit=1
+16.menu.bootloader.no_bootloader.bootloader.bootsz_bits=11
+16.menu.bootloader.no_bootloader.bootloader.bootrst_bit=1
+
 
 # EEPROM
 16.menu.eeprom.keep=EEPROM retained
