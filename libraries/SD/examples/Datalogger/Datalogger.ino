@@ -23,7 +23,6 @@
 #include <SD.h>
 #include <SPI.h>
 
-
 const int chipSelect = 4;
 
 void setup() {
@@ -32,7 +31,6 @@ void setup() {
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
-
 
   Serial.print("Initializing SD card...");
 
@@ -74,12 +72,3 @@ void loop() {
     Serial.println("error opening datalog.txt");
   }
 }
-
-
-
-
-
-
-
-
-

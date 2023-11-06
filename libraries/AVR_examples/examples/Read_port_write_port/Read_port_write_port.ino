@@ -7,16 +7,13 @@
 
 #include <avr/io.h>
 
-
-int main(void)
-{
+int main(void) {
   DDRA = 0xFF; // Set all pins on port A as output
   DDRB = 0x00; // Set all pins on port B as input
-  
-  while(1)
-  {
+
+  while (1) {
     PORTA = PINB; // Read the state of port B and write the state to port A
   }
-  
+
   return 0;
-}  
+}

@@ -24,9 +24,9 @@
 #include <SPI.h>
 
 // set up variables using the SD utility library functions:
-Sd2Card card;
+Sd2Card  card;
 SdVolume volume;
-SdFile root;
+SdFile   root;
 
 // change this to match your SD shield or module;
 // Arduino Ethernet shield: pin 4
@@ -41,7 +41,6 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
-
   Serial.print("\nInitializing SD card...");
 
   // we'll use the initialization code from the utility libraries
@@ -50,7 +49,8 @@ void setup() {
     Serial.println("initialization failed. Things to check:");
     Serial.println("* is a card inserted?");
     Serial.println("* is your wiring correct?");
-    Serial.println("* did you change the chipSelect pin to match your shield or module?");
+    Serial.println(
+        "* did you change the chipSelect pin to match your shield or module?");
     return;
   } else {
     Serial.println("Wiring is correct and a card is present.");
@@ -74,10 +74,10 @@ void setup() {
 
   // Now we will try to open the 'volume'/'partition' - it should be FAT16 or FAT32
   if (!volume.init(card)) {
-    Serial.println("Could not find FAT16/FAT32 partition.\nMake sure you've formatted the card");
+    Serial.println(
+        "Could not find FAT16/FAT32 partition.\nMake sure you've formatted the card");
     return;
   }
-
 
   // print the type and size of the first FAT-type volume
   uint32_t volumesize;
@@ -85,9 +85,9 @@ void setup() {
   Serial.println(volume.fatType(), DEC);
   Serial.println();
 
-  volumesize = volume.blocksPerCluster();    // clusters are collections of blocks
-  volumesize *= volume.clusterCount();       // we'll have a lot of clusters
-  volumesize *= 512;                            // SD card blocks are always 512 bytes
+  volumesize = volume.blocksPerCluster(); // clusters are collections of blocks
+  volumesize *= volume.clusterCount();    // we'll have a lot of clusters
+  volumesize *= 512;                      // SD card blocks are always 512 bytes
   Serial.print("Volume size (bytes): ");
   Serial.println(volumesize);
   Serial.print("Volume size (Kbytes): ");
@@ -97,7 +97,6 @@ void setup() {
   volumesize /= 1024;
   Serial.println(volumesize);
 
-
   Serial.println("\nFiles found on the card (name, date and size in bytes): ");
   root.openRoot(volume);
 
@@ -105,7 +104,4 @@ void setup() {
   root.ls(LS_R | LS_DATE | LS_SIZE);
 }
 
-
-void loop(void) {
-
-}
+void loop(void) {}
