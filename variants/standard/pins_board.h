@@ -52,6 +52,7 @@
 #define PIN_LCD_D5 (29)
 #define PIN_LCD_D6 (30)
 #define PIN_LCD_D7 (31)
+#define PIN_LCD_BL (23)
 
 // Double 7-Segment Display (7LED) (7SEG)
 #define PIN_7SEG_A  (19)
