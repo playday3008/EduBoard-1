@@ -75,6 +75,7 @@
 // 12-Bit Voltage Output Digital-to-Analog Converter with SPI Interface (DAC) (SPI) (MCP4921)
 #define PIN_DAC_SCK  (PIN_SPI_SCK)
 #define PIN_DAC_SDI  (PIN_SPI_MOSI)
+#define PIN_DAC_VOUT (15)
 
 // 2-Wire Serial Temperature Sensor (TEMP) (I2C) (TCN75AV)
 #define PIN_TEMP_SDA  (PIN_WIRE_SDA)
