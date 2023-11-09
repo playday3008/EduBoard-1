@@ -70,7 +70,7 @@
 // Clock and calendar with 240 x 8-bit RAM (RTC) (I2C) (PCF8583)
 #define PIN_RTC_SDA  (PIN_WIRE_SDA)
 #define PIN_RTC_SCL  (PIN_WIRE_SCL)
-#define PIN_RTC_ADDR (0b1010000)
+#define PIN_RTC_ADDR (0b10100000)
 
 // 12-Bit Voltage Output Digital-to-Analog Converter with SPI Interface (DAC) (SPI) (MCP4921)
 #define PIN_DAC_SCK  (PIN_SPI_SCK)
